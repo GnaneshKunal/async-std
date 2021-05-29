@@ -88,6 +88,16 @@ impl UdpSocket {
         }))
     }
 
+    /// Creates a new independently owned handle to the underlying socket.
+    ///
+    /// The returned `UdpSocket` is a reference to the same socket that this
+    /// object references. Both handles will read and write the same port, and
+    /// options set on one socket will be propagated to the other.
+    ///
+    pub fn try_clone(&self) -> io::Result<UdpSocket> {
+        Ok(UdpSocket::from(self.watcher.get_ref().try_clone()?))
+    }
+
     /// Returns the peer address that this listener is connected to.
     ///
     /// This can be useful, for example, when connect to port 0 to figure out which port was
